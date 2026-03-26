@@ -1,0 +1,10 @@
+$out_dir = 'build';
+$aux_dir = 'build';
+
+$pdf_mode = 1;
+
+END {
+    if (defined $root_filename) {
+        system("cmd /c copy /Y build\\$root_filename.pdf $root_filename.pdf >nul 2>nul");
+    }
+}
