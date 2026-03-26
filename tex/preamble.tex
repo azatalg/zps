@@ -1,10 +1,193 @@
-% !TeX root = ./main.tex
-\documentclass[12pt]{article}
+\documentclass[a4paper,12pt]{article}
 
+% --------------------------------------------------
+% Kodowanie i język
+% --------------------------------------------------
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath, amssymb}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{biblatex}
+\usepackage[polish,english]{babel}
+\usepackage{lmodern}
 
+% --------------------------------------------------
+% Strona
+% --------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% --------------------------------------------------
+% Matematyka
+% --------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{bm}
+\usepackage{nicefrac}
+
+% --------------------------------------------------
+% Grafika i tabele
+% --------------------------------------------------
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\captionsetup{
+    labelfont=bf,
+    font=small
+}
+
+% --------------------------------------------------
+% Kolory i linki
+% --------------------------------------------------
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{csquotes}
+
+% --------------------------------------------------
+% Bibliografia
+% --------------------------------------------------
+\usepackage[
+    backend=biber,
+    style=numeric,
+    sorting=none
+]{biblatex}
 \addbibresource{bibliography.bib}
+
+% --------------------------------------------------
+% LISTINGS (biały, clean styl)
+% --------------------------------------------------
+\usepackage{listings}
+
+\definecolor{codebg}{RGB}{255,255,255}
+\definecolor{codeframe}{RGB}{200,200,200}
+\definecolor{codekw}{RGB}{0,0,180}
+\definecolor{codecomment}{RGB}{0,120,0}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codenum}{RGB}{120,120,120}
+\definecolor{codetext}{RGB}{0,0,0}
+
+\lstdefinelanguage{cppcustom}{
+    language=C++,
+    morekeywords={
+        concept,requires,consteval,constinit,co_await,co_return,co_yield,
+        constexpr,const_cast,dynamic_cast,static_cast,reinterpret_cast,
+        nullptr,std,string,vector,map,unordered_map,set,unordered_set
+    }
+}
+
+\lstdefinestyle{cppstyle}{
+    language=cppcustom,
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small\color{codetext},
+    keywordstyle=\bfseries\color{codekw},
+    commentstyle=\itshape\color{codecomment},
+    stringstyle=\color{codestring},
+    numberstyle=\scriptsize\color{codenum},
+    numbers=left,
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{codeframe},
+    framesep=6pt,
+    xleftmargin=12pt,
+    framexleftmargin=8pt,
+    keepspaces=true,
+    columns=fullflexible,
+    upquote=true
+}
+
+\lstset{style=cppstyle}
+
+% --------------------------------------------------
+% Twierdzenia
+% --------------------------------------------------
+\newtheorem{theorem}{Twierdzenie}[section]
+\newtheorem{lemma}[theorem]{Lemat}
+\newtheorem{definition}[theorem]{Definicja}
+\newtheorem{example}[theorem]{Przykład}
+
+% --------------------------------------------------
+% Makra matematyczne
+% --------------------------------------------------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+% --------------------------------------------------
+% Makra tekstowe
+% --------------------------------------------------
+\newcommand{\cpp}{\texttt{C++}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\inlinecpp}[1]{\lstinline|#1|}
+\newcommand{\pathname}[1]{\texttt{#1}}
+\newcommand{\term}[1]{\emph{#1}}
+
+% --------------------------------------------------
+% Kod z pliku
+% --------------------------------------------------
+\newcommand{\cppfile}[2][]{
+    \lstinputlisting[caption={Plik \pathname{#2}},#1]{#2}
+}
+
+% --------------------------------------------------
+% Obrazki
+% --------------------------------------------------
+\newcommand{\img}[4][0.8\textwidth]{
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=#1]{#2}
+        \caption{#3}
+        \label{#4}
+    \end{figure}
+}
+
+\newcommand{\imgtwo}[5]{
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{#1}
+            \caption{#2}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{#3}
+            \caption{#4}
+        \end{subfigure}
+        \caption{#5}
+    \end{figure}
+}
+
+% --------------------------------------------------
+% Referencje
+% --------------------------------------------------
+\newcommand{\figref}[1]{\cref{#1}}
+\newcommand{\tabref}[1]{\cref{#1}}
+\newcommand{\secref}[1]{\cref{#1}}
+\newcommand{\eqnref}[1]{\cref{#1}}
+
+% --------------------------------------------------
+% Polskie nazwy
+% --------------------------------------------------
+\crefname{figure}{rys.}{rys.}
+\Crefname{figure}{Rys.}{Rys.}
+
+\crefname{table}{tab.}{tab.}
+\Crefname{table}{Tab.}{Tab.}
+
+\crefname{section}{sekcja}{sekcje}
+\Crefname{section}{Sekcja}{Sekcje}
+
+\crefname{equation}{równanie}{równania}
+\Crefname{equation}{Równanie}{Równania}
