@@ -1,9 +1,83 @@
-\section{Jakis rozdzial}
 
-\subsection{Coś tam}
 
-\cppfile{./codes/example.cpp}
+\section{What is a Recursive Generator?}
 
-\inlinecpp{std::vector}, $\R^n$.
+A recursive generator is an algorithm that creates sequence of numbers where the next number is calculated using the previous number (or several previous numbers). 
 
-\subsection{Model teoretyczny i wyniki}
+Every recursive generator relies on:
+\begin{itemize}
+    \item \textbf{The Seed (Initial State):} The generator needs a starting point to begin the process. If you give a recursive generator the exact same starting seed, it will always produce the exact same sequence of numbers. 
+    \item \textbf{The State:} This is the current ``memory'' of the generator. As the generator produces new numbers, its state updates. 
+\end{itemize}
+
+Because the generator relies on its previous state to create the next one, the process loops continuously. The goal of a good recursive generator is to make this loop so long and complicated that the sequence of numbers appears completely unpredictable to an outside observer.
+
+\newpage
+
+\subsection{Linear Feedback Shift Register (LFSR)} 
+It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and is widely used in digital electronics and simple cryptography. LSFR consists of:
+
+\begin{enumerate}
+    \item \textbf{Shift Register:} A device that shifts contents into adjacent positions in register or out of register if position is on the end. The positions where the content was is left empty if there is no content that that could be shifted there. 
+    
+    \item \textbf{Output Bit:} The bit at the end that is moved out of a shift register.
+
+    \item \textbf{Feedback Function:} A function that takes bits from certain positions \textbf{"taps"}, combines them in some sort of function and the result is fed back into the register's input bit. Bits are collected before the shift. 
+    
+\end{enumerate}
+
+\subsection{Maximum Length Sequence:} 
+
+An n-bit LFSR has $2^n$ possible states. However, because a state of all zeros will infinitely produce zeros, the maximum possible period for an LFSR sequence is $2^n-1$.
+
+\subsection{The Mathematics of LFSR}
+
+In mathematical terms, the new bit $b_n$ is calculated recursively based on the previous bits. If we have a register of length $k$, and the taps are defined by coefficients $c_i$ (where $c_i$ is 1 if there is a tap, and 0 if there isn't), the formula looks like this:
+
+$$b_{n} = (c_1 b_{n-1} + c_2 b_{n-2} + ... + c_k b_{n-k}) \pmod 2$$
+
+\textit{(Note: In binary math, addition modulo 2 is exactly the same thing as the XOR operation).}
+
+
+This relationship is represented by a characteristic polynomial:
+
+$$P(x) = 1 + c_1x + c_2x^2 + ... + c_nx^n$$
+
+To achieve the maximum period of $2^n-1$, the characteristic polynomial P(x) must be a primitive polynomial over $GF(2)$.
+
+
+
+
+\textbf{Example of LFSR for 4-bit number} with tap sequence [3, 4] and \textbf{XOR} being the feedback function:
+
+
+
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{|c|c||c|c||c|}
+\hline
+a & b & c (Tap)  & d (Tap) & Output \\
+\hline
+1 & 0 & 0 & 1 & 1 \\
+1 & 1 & 0 & 0 & 0  \\
+0 & 1 & 1 & 0 & 0  \\
+1 & 0 & 1 & 1 & 1  \\
+0 & 1 & 0 & 1 & 1  \\
+1 & 0 & 1 & 0 & 0  \\
+1 & 1 & 0 & 1 & 1  \\
+1 & 1 & 1 & 0 & 0  \\
+1 & 1 & 1 & 1 & 1  \\
+0 & 1 & 1 & 1 & 1  \\
+0 & 0 & 1 & 1 & 1  \\
+0 & 0 & 0 & 1 & 1  \\
+1 & 0 & 0 & 0 & 0  \\
+0 & 1 & 0 & 0 & 0  \\
+0 & 0 & 1 & 0 & 0  \\
+1 & 0 & 0 & 1 & 1  \\
+\hline
+\end{tabular}
+
+\label{tab:parametry}
+\end{table}
