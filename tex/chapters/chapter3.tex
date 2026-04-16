@@ -1,20 +1,5 @@
 
-
-\section{What is a Recursive Generator?}
-
-A recursive generator is an algorithm that creates sequence of numbers where the next number is calculated using the previous number (or several previous numbers). 
-
-Every recursive generator relies on:
-\begin{itemize}
-    \item \textbf{The Seed (Initial State):} The generator needs a starting point to begin the process. If you give a recursive generator the exact same starting seed, it will always produce the exact same sequence of numbers. 
-    \item \textbf{The State:} This is the current ``memory'' of the generator. As the generator produces new numbers, its state updates. 
-\end{itemize}
-
-Because the generator relies on its previous state to create the next one, the process loops continuously. The goal of a good recursive generator is to make this loop so long and complicated that the sequence of numbers appears completely unpredictable to an outside observer.
-
-\newpage
-
-\subsection{Linear Feedback Shift Register (LFSR)} 
+\section{Linear Feedback Shift Register (LFSR)} 
 It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and is widely used in digital electronics and simple cryptography. LSFR consists of:
 
 \begin{enumerate}
@@ -43,7 +28,7 @@ This relationship is represented by a characteristic polynomial:
 
 $$P(x) = 1 + c_1x + c_2x^2 + ... + c_nx^n$$
 
-To achieve the maximum period of $2^n-1$, the characteristic polynomial P(x) must be a primitive polynomial over $GF(2)$.
+To achieve the maximum period of $2^n-1$, the characteristic polynomial $P(x)$ must be a primitive polynomial over $GF(2)$.
 
 
 
@@ -81,3 +66,51 @@ a & b & c (Tap)  & d (Tap) & Output \\
 
 \label{tab:parametry}
 \end{table}
+
+
+
+\newpage
+
+\section{Lagged Fibonacci Generator (LFG)}
+
+
+\subsection{The Standard Fibonacci Sequence}
+In a classic Fibonacci sequence, the next number is simply the sum of the two numbers immediately preceding it.
+$$X_n = X_{n-1} + X_{n-2}$$
+
+However, this approach wouldn't be good for generating randomness because it is entirely predictable, and the numbers grow infinitely large.
+
+\subsection{Refining Fibonacci Sequence}
+Lagged Fibonacci Generator changes the  Fibonacci rule to: the new number is a combination of two previous numbers from the "lag" positions, constrained using modulo operation:
+
+$$X_n = X_{n-j} \star X_{n-k} \pmod m, 0 < j < k$$
+
+\begin{itemize}
+    \item $X_{n-j}$ and $X_{n-k}$ are the two previously generated numbers from the "lag" positions ($j$ and $k$ steps back in the sequence).
+    \item $\star$ represents a mathematical operator. 
+    \item $m$ is the maximum limit to keep the numbers contained.
+\end{itemize}
+
+
+\subsection{Different versions of LFG:}
+
+\begin{enumerate}
+    \item \textbf{ALFG:} Additive Lagged Fibonacci Generator. Uses addition. If $m$ is defined as power of $2$, so $m = 2^M$, the maximal length of generated sequence is $ (2^k - 1) * 2^{M-1} $.
+    
+    \item \textbf{MLFG:} Multiplicative Lagged Fibonacci Generator. Uses multiplication. These require all initial seeds to be odd to maintain the maximum period. If $m$ is defined as power of $2$, so $m = 2^M$, the maximal length of generated sequence is $ (2^k - 1) * 2^{M-3} $.
+
+    \item \textbf{GFSR:} Two-tap Generalized Feedback Shift Register. Uses the bitwise XOR operator. This is equivalent to an LFSR, the maximal length of generated sequence is $ (2^k - 1) $.
+    
+\end{enumerate}
+
+
+
+\subsection{The Mechanism in Practice}
+
+When the generator needs to create a new number, it looks at the number generated $j$ and $k$ steps ago, combines them using its operator, applies the modulo, and outputs the result. The oldest number in the memory is discarded, the new number is added to the recent memory, and the system moves forward. Because of LFG's characteristics, it requires $k$ numbers to start the algorithm.
+
+\subsection{Key Characteristics of LFG}
+\begin{itemize}
+    \item \textbf{Massive State Space:} Because maximum length is heavily dependent on number $k$ it allows the algorithm to have an incredibly long period before the sequence of random numbers ever repeats itself.
+    \item \textbf{Sensitivity to Setup:} The choice of the lags ($j$ and $k$) is highly critical. To achieve the maximum period, the characteristic polynomial $P(x) = x^k + x^j + 1$  must be a irreducible polynomial.
+\end{itemize}
