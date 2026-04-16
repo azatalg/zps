@@ -1,0 +1,124 @@
+==== START ==== 
+Working dir: C:\Users\lukas\Desktop\zps 
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+INFO: Could not find files for the given pattern(s).
+[INFO] Installing Chocolatey... 
+Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
+Getting latest version of the Chocolatey package for download.
+Not using proxy.
+Getting Chocolatey from https://community.chocolatey.org/api/v2/package/chocolatey/2.7.1.
+Downloading https://community.chocolatey.org/api/v2/package/chocolatey/2.7.1 to C:\Users\lukas\AppData\Local\Temp\chocolatey\chocoInstall\chocolatey.zip
+Not using proxy.
+Extracting C:\Users\lukas\AppData\Local\Temp\chocolatey\chocoInstall\chocolatey.zip to C:\Users\lukas\AppData\Local\Temp\chocolatey\chocoInstall
+Installing Chocolatey on the local machine
+Creating ChocolateyInstall as an environment variable (targeting 'Machine') 
+  Setting ChocolateyInstall to 'C:\ProgramData\chocolatey'
+WARNING: It's very likely you will need to close and reopen your shell 
+  before you can use choco.
+Restricting write permissions to Administrators
+We are setting up the Chocolatey package repository.
+The packages themselves go to 'C:\ProgramData\chocolatey\lib'
+  (i.e. C:\ProgramData\chocolatey\lib\yourPackageName).
+A shim file for the command line goes to 'C:\ProgramData\chocolatey\bin'
+  and points to an executable in 'C:\ProgramData\chocolatey\lib\yourPackageName'.
+
+Creating Chocolatey CLI folders if they do not already exist.
+
+chocolatey.nupkg file not installed in lib.
+ Attempting to locate it from bootstrapper.
+PATH environment variable does not have C:\ProgramData\chocolatey\bin in it. Adding...
+WARNING: Not setting tab completion: Profile file does not exist at 
+'C:\Users\lukas\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1'.
+Chocolatey CLI (choco.exe) is now ready.
+You can call choco from anywhere, command line or PowerShell by typing choco.
+Run choco /? for a list of functions.
+You may need to shut down and restart PowerShell and/or consoles
+ first prior to using choco.
+Ensuring Chocolatey commands are on the path
+Ensuring chocolatey.nupkg is in the lib folder
+[INFO] Installing Strawberry Perl... 
+Chocolatey v2.7.1
+3 validations performed. 2 success(es), 1 warning(s), and 0 error(s).
+
+Validation Warnings:
+ - A pending system reboot request has been detected, however, this is
+   being ignored due to the current Chocolatey configuration.  If you
+   want to halt when this occurs, then either set the global feature
+   using:
+     choco feature enable --name="exitOnRebootDetected"
+   or pass the option --exit-when-reboot-detected.
+
+Installing the following packages:
+strawberryperl
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+
+strawberryperl v5.42.2.1 [Approved]
+strawberryperl package files install completed. Performing other installation steps.
+Downloading strawberryperl 64 bit
+  from 'https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases/download/SP_54221_64bit/strawberry-perl-5.42.2.1-64bit.msi'
+
+Download of strawberry-perl-5.42.2.1-64bit.msi (200.09 MB) completed.
+Hashes match.
+Installing strawberryperl...
+strawberryperl has been installed.
+  strawberryperl may be able to be automatically uninstalled.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The install of strawberryperl was successful.
+  Deployed to 'C:\Strawberry\'
+
+Chocolatey installed 1/1 packages. 
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+[INFO] Installing MiKTeX... 
+Chocolatey v2.7.1
+3 validations performed. 2 success(es), 1 warning(s), and 0 error(s).
+
+Validation Warnings:
+ - A pending system reboot request has been detected, however, this is
+   being ignored due to the current Chocolatey configuration.  If you
+   want to halt when this occurs, then either set the global feature
+   using:
+     choco feature enable --name="exitOnRebootDetected"
+   or pass the option --exit-when-reboot-detected.
+
+Installing the following packages:
+miktex
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+
+miktex.install v25.3.0 [Approved] - Possibly broken
+miktex.install package files install completed. Performing other installation steps.
+Extracting 64-bit C:\ProgramData\chocolatey\lib\miktex.install\tools\miktexsetup-5.5.0+1763023-x64.zip to C:\ProgramData\chocolatey\lib\miktex.install\tools...
+Downloading a "Basic" package set to install.
+WARNING: No registry key found based on  'miktex*'
+Creating a temporary repository at 'C:\Users\lukas\AppData\Local\Temp\chocolatey\MiKTeX-repository'.
+Installing from temporary MiKTeX repository for all users.
+MiKTeX milestone 26.2 installed
+  miktex.install may be able to be automatically uninstalled.
+Environment Vars (like PATH) have changed. Close/reopen your shell to
+ see the changes (or in powershell/cmd.exe just type `refreshenv`).
+ The install of miktex.install was successful.
+  Deployed to 'C:\Program Files\MiKTeX'
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+
+miktex v25.3.0 [Approved] - Possibly broken
+miktex package files install completed. Performing other installation steps.
+ The install of miktex was successful.
+  Software install location not explicitly set, it could be in package or
+  default install location of installer.
+
+Chocolatey installed 2/2 packages. 
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+[INFO] Detected Perl: C:\Strawberry\perl\bin 
+[INFO] Detected MiKTeX: C:\Program Files\MiKTeX\miktex\bin\x64 
+Value Path exists, overwrite(Yes/No)? Operacja ukoäczona pomy˜lnie.
+[INFO] Updating MiKTeX (admin)... 
+Warning: --update-db: this option has been deprecated; it will be removed from a future version of MiKTeX
+[INFO] Checking updates... 
+Warning: --find-updates: this option has been deprecated; it will be removed from a future version of MiKTeX
+There are currently no updates available.
+[INFO] Installing updates... 
+Warning: --update: this option has been deprecated; it will be removed from a future version of MiKTeX
+There are currently no updates available.
+==== DONE ==== 
