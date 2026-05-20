@@ -1,0 +1,76 @@
+\section{Conclusion and Comparison of PRNG Methods}
+
+This section summarizes and compares the pseudorandom number generators discussed in the previous chapters. The goal is to highlight their main differences in terms of period length, computational efficiency, statistical quality, and structural complexity.
+
+\subsection{General Comparison Criteria}
+
+Pseudorandom number generators can be evaluated according to several fundamental criteria:
+
+\begin{itemize}
+    \item \textbf{Period length:} the length of the cycle before the sequence repeats.
+    \item \textbf{Computational efficiency:} the cost of generating a single value.
+    \item \textbf{Statistical quality:} how well the output approximates a truly random sequence.
+    \item \textbf{Structural complexity:} mathematical and implementation complexity of the generator.
+\end{itemize}
+
+These criteria are often in conflict; for example, higher statistical quality typically comes at the cost of increased complexity.
+
+\subsection{Classical Generators}
+
+Classical methods such as linear congruential generators (LCG) and Lehmer generators are based on simple modular arithmetic:
+
+$$
+x_{n+1} = (ax_n + c) \mod m
+$$
+
+or in the multiplicative case:
+
+$$
+x_{n+1} = ax_n \mod m.
+$$
+
+These generators are computationally very efficient and easy to implement. However, their statistical properties depend strongly on parameter choice.
+
+The period of an LCG is at most $m$, and full period is achieved only under the Hull--Dobell conditions.
+
+A known drawback is their tendency to exhibit geometric structure when viewed in higher dimensions, which reduces their suitability for high-quality simulations.
+
+\subsection{Recursive and Shift-Based Generators}
+
+More advanced recursive methods such as lagged Fibonacci generators (LFG) and linear feedback shift registers (LFSR) improve statistical properties by introducing longer memory into the state:
+
+\begin{itemize}
+    \item LFG uses previous values in a recurrence relation.
+    \item LFSR operates on bit-level linear recurrences over finite fields.
+\end{itemize}
+
+These methods generally achieve longer periods and better distribution properties than simple LCGs, while maintaining moderate computational cost.
+
+\subsection{Modern High-Quality Generators}
+
+Modern generators such as the Mersenne Twister, PCG, and xorshift-based methods are designed to optimize statistical quality and period length.
+
+The Mersenne Twister, for example, achieves an extremely large period of $2^{19937}-1$, making repetition practically impossible in most applications.
+
+PCG (Permuted Congruential Generator) improves statistical behavior by applying permutation functions to linear congruential states, while maintaining efficiency.
+
+Xorshift generators rely on bitwise XOR and shift operations, providing extremely fast generation with good statistical performance when properly parameterized.
+
+\subsection{Trade-offs Between Methods}
+
+There is no single optimal PRNG for all applications. Instead, different methods optimize different aspects:
+
+\begin{itemize}
+    \item \textbf{LCG / Lehmer:} very fast, but weaker statistical quality.
+    \item \textbf{LFSR / LFG:} better structure and longer period, moderate complexity.
+    \item \textbf{Mersenne Twister:} excellent statistical properties, very long period, higher state complexity.
+    \item \textbf{PCG / Xorshift:} modern balance between speed and quality.
+\end{itemize}
+
+\subsection{Final Remarks}
+
+Pseudorandom number generation is fundamentally a trade-off between simplicity, speed, and statistical quality.
+
+While classical methods such as LCG provide insight into the structure of deterministic sequences, modern generators achieve practical randomness suitable for large-scale simulations and computational applications.
+
+Understanding the underlying mathematical structure of these generators is essential for selecting appropriate methods in scientific computing, cryptography, and numerical simulations.
