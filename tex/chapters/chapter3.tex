@@ -1,5 +1,7 @@
+\chapter{Recursive Generators: LFSR and LFG}
 
 \section{Linear Feedback Shift Register (LFSR)} 
+
 It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and is widely used in digital electronics and simple cryptography. LSFR consists of:
 
 \begin{enumerate}
@@ -11,106 +13,116 @@ It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and
     
 \end{enumerate}
 
-\subsection{Maximum Length Sequence:} 
+\subsection{Maximum Length Sequence} 
 
 An n-bit LFSR has $2^n$ possible states. However, because a state of all zeros will infinitely produce zeros, the maximum possible period for an LFSR sequence is $2^n-1$.
 
-\subsection{The Mathematics of LFSR}
 
-In mathematical terms, the new bit $b_n$ is calculated recursively based on the previous bits. If we have a register of length $k$, and the taps are defined by coefficients $c_i$ (where $c_i$ is 1 if there is a tap, and 0 if there isn't), the formula looks like this:
+\section{The Mathematics of LFSR}
 
-$$b_{n} = (c_1 b_{n-1} + c_2 b_{n-2} + ... + c_k b_{n-k}) \pmod 2$$
+\subsection{The Recurrence Relation}
+The new bit $b_n$ in a Linear Feedback Shift Register (LFSR) is calculated recursively based on the previous bits. Given a register of length $k$ with feedback taps defined by coefficients $c_i$ (where $c_i = 1$ if there is a active tap, and $0$ if there is not), the sequence generation is governed by the following formula:
+\[
+b_{n} = (c_1 b_{n-1} + c_2 b_{n-2} + \dots + c_k b_{n-k}) \pmod 2
+\]
+\textit{(Note: In binary mathematics, addition modulo 2 is equivalent to the logical XOR operation).}
 
-\textit{(Note: In binary math, addition modulo 2 is exactly the same thing as the XOR operation).}
+\subsection{Polynomial Representation and State Shifts}
+This feedback relationship can be elegantly modeled using polynomials over the binary field. Let us define the characteristic polynomial $p$ and its truncated variant $\tilde{p}$ as:
+\[
+p = x^{n+1} + b_n x^n + \dots + b_1 x + b_0
+\]
+\[
+\tilde{p} = b_n x^n + \dots + b_1 x + b_0
+\]
+If the current state of the register is represented as a polynomial $q$:
+\[
+q = a_n x^n + a_{n-1}x^{n-1} + \dots + a_0
+\]
+A single shift of the register corresponds to multiplying the state polynomial by the indeterminate $x$:
+\[
+x \cdot q = a_n x^{n+1} + a_{n-1}x^{n} + \dots + a_0x
+\]
+To keep the state within the bounds of the register, we reduce this result modulo the characteristic polynomial $p$:
+\[
+xq \pmod p = xq - a_np
+\]
+Expanding this modular reduction yields the polynomial configuration for the subsequent state:
+\[
+(a_{n-1} - b_n)x^{n} + (a_{n-2} - b_{n-1})x^{n-1} + \dots + (a_0 - b_1)x - b_0
+\]
+
+\subsection{Algebraic Structure and Finite Fields}
+To analyze the periodicity and structural properties of the generated sequences, we look at the underlying algebraic frameworks. By the Chinese Remainder Theorem for integers, we know that if $m$ and $n$ are coprime, there exists an isomorphic mapping:
+\[
+\mathbb{Z}_{mn} \rightarrow \mathbb{Z}_m \times \mathbb{Z}_n
+\]
+\[
+k \rightarrow (k \bmod{m},\; k \bmod{n})
+\]
+Because $m$ and $n$ are coprime ($\gcd(m,n)=1$), this representation is a one-to-one mapping (an injection, and by cardinality, a bijection). An analogous property holds for the polynomial ring over a field $K$:
+\[
+K[x]/(p_1 \cdot p_2) \cong K[x]/(p_1) \times K[x]/(p_2)
+\]
+If the characteristic polynomial $p$ is irreducible over $K = \mathbb{Z}_2$, the quotient ring forms a Galois finite field $F = K[x]/(p)$ containing exactly $2^n$ elements. For any non-zero element $y \in F \setminus \{0\}$, by Lagrange's theorem, its multiplicative order must divide the order of the group, meaning:
+\[
+y^k \cdot y^{2^n-1} = 1
+\]
+\[
+y^{2^n-1} - 1 = 0 \implies \forall (y \in F \setminus \{0\}), \; y^{2^n} - y = 0
+\]
+
+\subsection{The Role of the Least Common Multiple (LCM)}
+When analyzing elements in a direct product of structures, such as $y \in \mathbb{Z}_{t_1} \times \mathbb{Z}_{t_2}$, the periodicity of the combined system is determined by the \textit{Least Common Multiple} ($\text{lcm}$). 
+
+Mathematically, if an element $y_1$ has a period of $t_1$ (meaning $y_1^{t_1} = 1$) and an element $y_2$ has a period of $t_2$ (meaning $y_2^{t_2} = 1$), then the joint element $y = (y_1, y_2)$ will only return to the identity state when both coordinates simultaneously complete full cycles. This global period is the smallest positive integer $L$ that is a multiple of both $t_1$ and $t_2$:
+\[
+y^{\text{lcm}(t_1, t_2)} = (1, 1)
+\]
+If $t_1$ and $t_2$ share common factors, $\text{lcm}(t_1, t_2)$ is strictly less than their product $t_1 \cdot t_2$, shrinking the total period of the system. Maximum sequence length is only achieved when components operate at coprime periods, pushing the $\text{lcm}$ to its absolute maximum upper bound: $t_1 \cdot t_2$.
+
+\subsection{Periodicity and Minimal Polynomials}
+To determine if an LFSR sequence can achieve maximum length, we investigate if there exists a smaller exponent $l < 2^n - 1$ such that $y^l = 1$ for all elements. If $\forall (y \in F), y^{l+1} - y = 0$, it implies that $l + 1 \geq 2^{n-1}$. 
+
+Because the multiplicative group of the finite field $F$ is cyclic, there exists a primitive generator element $y \in F$ whose successive powers $y^k$ for $k = 0, \dots, 2^n - 2$ are completely distinct and map out all non-zero elements. Let $h$ be the minimal polynomial of $y$. By definition, $h(y) = 0$, $h$ is monic, and its degree is minimal among all polynomials $g$ satisfying $g(y) = 0$. 
+
+Consequently, $h$ must be irreducible. If there exists some polynomial $g$ such that $g(y) = 0$, applying the polynomial division algorithm yields:
+\[
+g = qh + r \quad \text{where } \deg(r) < \deg(h)
+\]
+Evaluating this at $y$ gives $g(y) = q(y)h(y) + r(y) \implies 0 = 0 + r(y)$. Since $r(y) = 0$ and its degree is strictly less than the minimal polynomial $h$, it must hold that $r = 0$, proving that $g$ is an exact multiple of $h$ ($g = qh$).
+
+The evaluation mapping $Y \rightarrow y$ establishes an isomorphism from the quotient ring $K[Y]/(h[Y])$ to the finite field $F$. Most importantly, sequential powers of $Y$ generate every non-zero element of $K[Y]/(h[Y])$.
+
+\textbf{Conclusion:} To achieve the maximum possible period of $2^n-1$ states without stalling or repeating early, the characteristic polynomial $P(x)$ must be a \textbf{primitive polynomial} over $GF(2)$.
 
 
-This relationship is represented by a characteristic polynomial:
-
-$$P(x) = 1 + c_1x + c_2x^2 + ... + c_nx^n$$
-
-To achieve the maximum period of $2^n-1$, the characteristic polynomial $P(x)$ must be a primitive polynomial over $GF(2)$.
-
-
-
-
-\textbf{Example of LFSR for 4-bit number} with tap sequence [3, 4] and \textbf{XOR} being the feedback function:
-
-
-
+\subsection{Example: 4-Bit LFSR}
+Consider a 4-bit LFSR with a tap sequence at positions 3 and 4, utilizing XOR as the feedback function. 
 
 \begin{table}[h]
 \centering
-\small
-\begin{tabular}{|c|c||c|c||c|}
-\hline
-a & b & c (Tap)  & d (Tap) & Output \\
-\hline
-1 & 0 & 0 & 1 & 1 \\
-1 & 1 & 0 & 0 & 0  \\
-0 & 1 & 1 & 0 & 0  \\
-1 & 0 & 1 & 1 & 1  \\
-0 & 1 & 0 & 1 & 1  \\
-1 & 0 & 1 & 0 & 0  \\
-1 & 1 & 0 & 1 & 1  \\
-1 & 1 & 1 & 0 & 0  \\
-1 & 1 & 1 & 1 & 1  \\
-0 & 1 & 1 & 1 & 1  \\
-0 & 0 & 1 & 1 & 1  \\
-0 & 0 & 0 & 1 & 1  \\
-1 & 0 & 0 & 0 & 0  \\
-0 & 1 & 0 & 0 & 0  \\
-0 & 0 & 1 & 0 & 0  \\
-1 & 0 & 0 & 1 & 1  \\
-\hline
+\begin{tabular}{c c c c c}
+\toprule
+\textbf{a} & \textbf{b} & \textbf{c(tap)} & \textbf{d(tap)} & \textbf{Output} \\
+\midrule
+\texttt{1} & \texttt{0} & \texttt{0} & \texttt{1} & \texttt{1} \\
+\texttt{1} & \texttt{1} & \texttt{0} & \texttt{0} & \texttt{0}  \\
+\texttt{0} & \texttt{1} & \texttt{1} & \texttt{0} & \texttt{0}  \\
+\texttt{1} & \texttt{0} & \texttt{1} & \texttt{1} & \texttt{1}  \\
+\texttt{0} & \texttt{1} & \texttt{0} & \texttt{1} & \texttt{1}  \\
+\texttt{1} & \texttt{0} & \texttt{1} & \texttt{0} & \texttt{0}  \\
+\texttt{1} & \texttt{1} & \texttt{0} & \texttt{1} & \texttt{1}  \\
+\texttt{1} & \texttt{1} & \texttt{1} & \texttt{0} & \texttt{0}  \\
+\texttt{1} & \texttt{1} & \texttt{1} & \texttt{1} & \texttt{1}  \\
+\texttt{0} & \texttt{1} & \texttt{1} & \texttt{1} & \texttt{1}  \\
+\texttt{0} & \texttt{0} & \texttt{1} & \texttt{1} & \texttt{1}  \\
+\texttt{0} & \texttt{0} & \texttt{0} & \texttt{1} & \texttt{1}  \\
+\texttt{1} & \texttt{0} & \texttt{0} & \texttt{0} & \texttt{0}  \\
+\texttt{0} & \texttt{1} & \texttt{0} & \texttt{0} & \texttt{0}  \\
+\texttt{0} & \texttt{0} & \texttt{1} & \texttt{0} & \texttt{0}  \\
+\texttt{1} & \texttt{0} & \texttt{0} & \texttt{1} & \texttt{1}  \\
+\bottomrule
 \end{tabular}
-
-\label{tab:parametry}
+\caption{Example of 4-bit LFSR with taps c, b}
 \end{table}
-
-
-
-\newpage
-
-\section{Lagged Fibonacci Generator (LFG)}
-
-
-\subsection{The Standard Fibonacci Sequence}
-In a classic Fibonacci sequence, the next number is simply the sum of the two numbers immediately preceding it.
-$$X_n = X_{n-1} + X_{n-2}$$
-
-However, this approach wouldn't be good for generating randomness because it is entirely predictable, and the numbers grow infinitely large.
-
-\subsection{Refining Fibonacci Sequence}
-Lagged Fibonacci Generator changes the  Fibonacci rule to: the new number is a combination of two previous numbers from the "lag" positions, constrained using modulo operation:
-
-$$X_n = X_{n-j} \star X_{n-k} \pmod m, 0 < j < k$$
-
-\begin{itemize}
-    \item $X_{n-j}$ and $X_{n-k}$ are the two previously generated numbers from the "lag" positions ($j$ and $k$ steps back in the sequence).
-    \item $\star$ represents a mathematical operator. 
-    \item $m$ is the maximum limit to keep the numbers contained.
-\end{itemize}
-
-
-\subsection{Different versions of LFG:}
-
-\begin{enumerate}
-    \item \textbf{ALFG:} Additive Lagged Fibonacci Generator. Uses addition. If $m$ is defined as power of $2$, so $m = 2^M$, the maximal length of generated sequence is $ (2^k - 1) * 2^{M-1} $.
-    
-    \item \textbf{MLFG:} Multiplicative Lagged Fibonacci Generator. Uses multiplication. These require all initial seeds to be odd to maintain the maximum period. If $m$ is defined as power of $2$, so $m = 2^M$, the maximal length of generated sequence is $ (2^k - 1) * 2^{M-3} $.
-
-    \item \textbf{GFSR:} Two-tap Generalized Feedback Shift Register. Uses the bitwise XOR operator. This is equivalent to an LFSR, the maximal length of generated sequence is $ (2^k - 1) $.
-    
-\end{enumerate}
-
-
-
-\subsection{The Mechanism in Practice}
-
-When the generator needs to create a new number, it looks at the number generated $j$ and $k$ steps ago, combines them using its operator, applies the modulo, and outputs the result. The oldest number in the memory is discarded, the new number is added to the recent memory, and the system moves forward. Because of LFG's characteristics, it requires $k$ numbers to start the algorithm.
-
-\subsection{Key Characteristics of LFG}
-\begin{itemize}
-    \item \textbf{Massive State Space:} Because maximum length is heavily dependent on number $k$ it allows the algorithm to have an incredibly long period before the sequence of random numbers ever repeats itself.
-    \item \textbf{Sensitivity to Setup:} The choice of the lags ($j$ and $k$) is highly critical. To achieve the maximum period, the characteristic polynomial $P(x) = x^k + x^j + 1$  must be a irreducible polynomial.
-\end{itemize}
