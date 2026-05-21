@@ -1,6 +1,6 @@
-\chapter{Recursive Generators: LFSR and LFG}
+\section{Recursive Generators: LFSR and LFG}
 
-\section{Linear Feedback Shift Register (LFSR)} 
+\subsection{Linear Feedback Shift Register (LFSR)} 
 
 It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and is widely used in digital electronics and simple cryptography. LSFR consists of:
 
@@ -13,21 +13,19 @@ It is incredibly fast, operates fundamentally on binary numbers (0s and 1s), and
     
 \end{enumerate}
 
-\subsection{Maximum Length Sequence} 
-
 An n-bit LFSR has $2^n$ possible states. However, because a state of all zeros will infinitely produce zeros, the maximum possible period for an LFSR sequence is $2^n-1$.
 
 
-\section{The Mathematics of LFSR}
+\subsection{The Mathematics of LFSR}
 
-\subsection{The Recurrence Relation}
+\subsubsection{The Recurrence Relation}
 The new bit $b_n$ in a Linear Feedback Shift Register (LFSR) is calculated recursively based on the previous bits. Given a register of length $k$ with feedback taps defined by coefficients $c_i$ (where $c_i = 1$ if there is a active tap, and $0$ if there is not), the sequence generation is governed by the following formula:
 \[
 b_{n} = (c_1 b_{n-1} + c_2 b_{n-2} + \dots + c_k b_{n-k}) \pmod 2
 \]
 \textit{(Note: In binary mathematics, addition modulo 2 is equivalent to the logical XOR operation).}
 
-\subsection{Polynomial Representation and State Shifts}
+\subsubsection{Polynomial Representation and State Shifts}
 This feedback relationship can be elegantly modeled using polynomials over the binary field. Let us define the characteristic polynomial $p$ and its truncated variant $\tilde{p}$ as:
 \[
 p = x^{n+1} + b_n x^n + \dots + b_1 x + b_0
@@ -52,7 +50,7 @@ Expanding this modular reduction yields the polynomial configuration for the sub
 (a_{n-1} - b_n)x^{n} + (a_{n-2} - b_{n-1})x^{n-1} + \dots + (a_0 - b_1)x - b_0
 \]
 
-\subsection{Algebraic Structure and Finite Fields}
+\subsubsection{Algebraic Structure and Finite Fields}
 To analyze the periodicity and structural properties of the generated sequences, we look at the underlying algebraic frameworks. By the Chinese Remainder Theorem for integers, we know that if $m$ and $n$ are coprime, there exists an isomorphic mapping:
 \[
 \mathbb{Z}_{mn} \rightarrow \mathbb{Z}_m \times \mathbb{Z}_n
@@ -72,7 +70,7 @@ y^k \cdot y^{2^n-1} = 1
 y^{2^n-1} - 1 = 0 \implies \forall (y \in F \setminus \{0\}), \; y^{2^n} - y = 0
 \]
 
-\subsection{The Role of the Least Common Multiple (LCM)}
+\subsubsection{The Role of the Least Common Multiple (LCM)}
 When analyzing elements in a direct product of structures, such as $y \in \mathbb{Z}_{t_1} \times \mathbb{Z}_{t_2}$, the periodicity of the combined system is determined by the \textit{Least Common Multiple} ($\text{lcm}$). 
 
 Mathematically, if an element $y_1$ has a period of $t_1$ (meaning $y_1^{t_1} = 1$) and an element $y_2$ has a period of $t_2$ (meaning $y_2^{t_2} = 1$), then the joint element $y = (y_1, y_2)$ will only return to the identity state when both coordinates simultaneously complete full cycles. This global period is the smallest positive integer $L$ that is a multiple of both $t_1$ and $t_2$:
@@ -81,7 +79,7 @@ y^{\text{lcm}(t_1, t_2)} = (1, 1)
 \]
 If $t_1$ and $t_2$ share common factors, $\text{lcm}(t_1, t_2)$ is strictly less than their product $t_1 \cdot t_2$, shrinking the total period of the system. Maximum sequence length is only achieved when components operate at coprime periods, pushing the $\text{lcm}$ to its absolute maximum upper bound: $t_1 \cdot t_2$.
 
-\subsection{Periodicity and Minimal Polynomials}
+\subsubsection{Periodicity and Minimal Polynomials}
 To determine if an LFSR sequence can achieve maximum length, we investigate if there exists a smaller exponent $l < 2^n - 1$ such that $y^l = 1$ for all elements. If $\forall (y \in F), y^{l+1} - y = 0$, it implies that $l + 1 \geq 2^{n-1}$. 
 
 Because the multiplicative group of the finite field $F$ is cyclic, there exists a primitive generator element $y \in F$ whose successive powers $y^k$ for $k = 0, \dots, 2^n - 2$ are completely distinct and map out all non-zero elements. Let $h$ be the minimal polynomial of $y$. By definition, $h(y) = 0$, $h$ is monic, and its degree is minimal among all polynomials $g$ satisfying $g(y) = 0$. 

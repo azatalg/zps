@@ -1,11 +1,11 @@
 
-\chapter{The Mersenne Twister: High-Dimensional Equidistribution}
+\section{The Mersenne Twister: High-Dimensional Equidistribution}
 
 Developed in 1997 by Makoto Matsumoto and Takuji Nishimura, the Mersenne Twister (MT) is a widely used pseudorandom number generator in modern computing, serving as the default or standard option in software environments including Python's \texttt{random} module, R, MATLAB, and the C++ standard library.
 
 By choosing parameters such that the effective state size $nw-r$ corresponds to a Mersenne exponent, the MT algorithm achieves a staggering periodicity and an extraordinarily high degree of multidimensional equidistribution.
 
-\section{The Twisted Generalized Feedback Shift Register (TGFSR)}
+\subsection{The Twisted Generalized Feedback Shift Register (TGFSR)}
 
 The Mersenne Twister, is based on  Generalized Feedback Shift Register (GFSR). While a standard LFSR operates on single bits over $\mathbb{F}_2$, a GFSR operates on $w$-bit words, effectively running $w$ identical LFSRs in parallel.
 
@@ -36,7 +36,7 @@ Let us rigorously dissect the components of this linear transformation over $\ma
 Because $A$ is in rational normal form, multiplying a vector $\mathbf{y} = (y_{w-1}, \dots, y_0)$ by $A$ can be executed via a single bit-shift and a conditional XOR. If the lowest bit $y_0 = 0$, the result is $\mathbf{y} \gg 1$. If $y_0 = 1$, the result is $(\mathbf{y} \gg 1) \oplus \mathbf{a}$, where $\mathbf{a} = (a_{w-1}, \dots, a_0)$. 
 \end{remark}
 
-\section{Tempering: Guaranteeing Equidistribution}
+\subsection{Tempering: Guaranteeing Equidistribution}
 
 To avoid high degrees of linear correlation, failing rigorous tests for $k$-distribution, we add \textbf{tempering} to the process, which is an invertible linear transformation over $\mathbb{F}_2$. The tempering function $T: \mathbb{F}_2^w \to \mathbb{F}_2^w$ is designed to multiply the state vector by an invertible matrix $T$, which systematically scrambles the bits to achieve an optimal multidimensional distribution.
 
@@ -54,7 +54,7 @@ where $\mathbin{\&}$ denotes the bitwise AND operation.
 Because each step of the tempering process is an invertible linear transformation over $\mathbb{F}_2$, the composition of these transformations is likewise invertible. Hence, the entire tempering process defines a bijection on $\mathbb{F}_2^w$.
 \end{theorem}
 
-\section{Periodicity and Mersenne Primes}
+\subsection{Periodicity and Mersenne Primes}
 
 The defining characteristic of the Mersenne Twister is its periodicity. The total number of bits in the internal state is $n \times w$. However, because $r$ bits are masked out during the concatenation step $\left( \mathbf{x}_k^u \mid \mathbf{x}_{k+1}^l \right)$, the actual operational state space consists of $nw - r$ bits. 
 
@@ -66,9 +66,9 @@ A \textbf{Mersenne prime} is a prime number that can be written in the form $M_p
 
 By carefully choosing the parameters $n$, $w$, and $r$ such that $p = nw - r$ corresponds to the exponent of a Mersenne prime, Matsumoto and Nishimura simplified the mathematical analysis required to construct a primitive characteristic polynomial for the generator.
 
-\section{Variants of the Mersenne Twister}
+\subsection{Variants of the Mersenne Twister}
 
-\subsection{The MT19937 Variant}
+\subsubsection{The MT19937 Variant}
 The most popular configuration of the Mersenne Twister. The parameters are chosen as follows:
 \begin{itemize}
     \item Word size $w = 32$ bits.
@@ -82,7 +82,7 @@ This configuration results in a total operational state size of $624 \times 32 -
 \]
 The fact that $19937$ is a Mersenne exponent plays an important role in the underlying construction and analysis.
 
-\subsection{Other variants of the MT}
+\subsubsection{Other variants of the MT}
 \begin{enumerate}
     \item \textbf{CryptMT:} CryptMT is a stream cipher and cryptographically secure pseudorandom number generator (CSPRNG)  It was developed by Makoto Matsumoto and Takuji Nishimura alongside Mariko Hagita and Mutsuo Saito. Unlike the classical Mersenne Twister or its other structural derivatives, CryptMT is patented.
     
